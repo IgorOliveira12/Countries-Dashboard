@@ -21,7 +21,7 @@ export default function Filters({ filters, setFilters }) {
   }
 
   return (
-    <section>
+    <section className="filters">
       <input
         type="text"
         placeholder="Search country..."

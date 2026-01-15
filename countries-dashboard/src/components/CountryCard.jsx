@@ -1,10 +1,9 @@
 export default function CountryCard({ country }) {
   return (
-    <article>
+    <article className="country-card">
       <img
         src={country.flags.png}
         alt={`Flag of ${country.name.common}`}
-        width={160}
       />
 
       <h2>{country.name.common}</h2>
