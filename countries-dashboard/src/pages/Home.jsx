@@ -1,8 +1,3 @@
-import useCountries from "../hooks/useCountries";
-import Filters from "../components/Filters";
-import CountryCard from "../components/CountryCard";
-import Loader from "../components/Loader";
-
 export default function Home() {
   const { countries, loading, error, filters, setFilters } = useCountries();
 
@@ -11,21 +6,21 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>Countries</h1>
+      <header className="header">
+        <h1>Countries</h1>
+        <Filters filters={filters} setFilters={setFilters} />
+      </header>
 
-      <Filters filters={filters} setFilters={setFilters} />
+      <p className="total">Total: {countries.length}</p>
 
-      <p>Total: {countries.length}</p>
-
-     <section className="countries">
-    {countries.map(country => (
-    <CountryCard
-      key={country.name.common}
-      country={country}
-    />
-  ))}
-</section>
-
+      <section className="countries">
+        {countries.map(country => (
+          <CountryCard
+            key={country.name.common}
+            country={country}
+          />
+        ))}
+      </section>
     </div>
   );
 }
