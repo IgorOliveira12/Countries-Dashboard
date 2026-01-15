@@ -11,7 +11,7 @@ export default function useCountries() {
 
   const [filters, setFilters] = useState({ 
     search: "", 
-    region: "All",
+    region: "all",
     sort: "name" 
   });
 
