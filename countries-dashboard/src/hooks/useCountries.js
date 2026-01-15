@@ -52,7 +52,7 @@ export default function useCountries() {
     }
 
     //region
-    if (filters.region !== "All") {
+    if (filters.region !== "all") {
         result = result.filter(country => 
             country.region === filters.region
         );
