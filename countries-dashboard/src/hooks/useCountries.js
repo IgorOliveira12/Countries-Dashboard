@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 
-const API_URL = "https://restcountries.com/v3.1/all";
+const API_URL =
+  "https://restcountries.com/v3.1/all?fields=name,region,population,flags";
+
 
 export default function useCountries() {
   const [countries, setCountries] = useState([]);
@@ -42,29 +44,29 @@ export default function useCountries() {
 
 
     //search
-    if (filter.search) {
-        const query = filter.search.toLowerCase();
+    if (filters.search) {
+        const query = filters.search.toLowerCase();
         result = result.filter(country => 
             country.name.common.toLowerCase().includes(query)
         );
     }
 
     //region
-    if (filter.region !== "All") {
+    if (filters.region !== "All") {
         result = result.filter(country => 
-            country.region === filter.region
+            country.region === filters.region
         );
     }
 
     //sort
-    if (filter.sort === "name") {
+    if (filters.sort === "name") {
         result.sort((a, b) => a.name.common.localeCompare(b.name.common));
-    } else if (filter.sort === "population") {
+    } else if (filters.sort === "population") {
         result.sort((a, b) => a.population - b.population);
     }
 
     return result;
-  }, [countries, filter]);
+  }, [countries, filters]);
 
   return {
     countries: visibleCountries,
