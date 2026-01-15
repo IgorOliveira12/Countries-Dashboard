@@ -1,3 +1,8 @@
+import useCountries from "../hooks/useCountries";
+import Loader from "../components/Loader";
+import CountryCard from "../components/CountryCard";
+import Filters from "../components/Filters";
+
 export default function Home() {
   const { countries, loading, error, filters, setFilters } = useCountries();
 
