@@ -3,66 +3,72 @@ import { useState, useEffect, useMemo } from "react";
 const API_URL =
   "https://restcountries.com/v3.1/all?fields=name,region,population,flags";
 
+const FILTERS_STORAGE_KEY = "countries_filters";
 
 export default function useCountries() {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [filters, setFilters] = useState({ 
-    search: "", 
-    region: "all",
-    sort: "name" 
+  const [filters, setFilters] = useState(() => {
+    const stored = localStorage.getItem(FILTERS_STORAGE_KEY);
+    return stored
+      ? JSON.parse(stored)
+      : { search: "", region: "all", sort: "name" };
   });
 
-    useEffect(() => {
-        async function fetchCountries() {
-            try {
-            setLoading(true);
-            setError(null);
+  useEffect(() => {
+    async function fetchCountries() {
+      try {
+        setLoading(true);
+        setError(null);
 
-            const response = await fetch(API_URL);
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch countries");
-            }
-
-            const data = await response.json();
-            setCountries(data);
-            } catch (err) {
-            setError(err.message || "Unknown error");
-            } finally {
-            setLoading(false);
-            }
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error("Failed to fetch countries");
         }
 
-        fetchCountries();
-    }, []);
+        const data = await response.json();
+        setCountries(data);
+      } catch (err) {
+        setError(err.message || "Unknown error");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      FILTERS_STORAGE_KEY,
+      JSON.stringify(filters)
+    );
+  }, [filters]);
 
   const visibleCountries = useMemo(() => {
     let result = [...countries];
 
-
-    //search
     if (filters.search) {
-        const query = filters.search.toLowerCase();
-        result = result.filter(country => 
-            country.name.common.toLowerCase().includes(query)
-        );
+      const query = filters.search.toLowerCase();
+      result = result.filter(country =>
+        country.name.common.toLowerCase().includes(query)
+      );
     }
 
-    //region
     if (filters.region !== "all") {
-        result = result.filter(country => 
-            country.region === filters.region
-        );
+      result = result.filter(
+        country => country.region === filters.region
+      );
     }
 
-    //sort
     if (filters.sort === "name") {
-        result.sort((a, b) => a.name.common.localeCompare(b.name.common));
+      result.sort((a, b) =>
+        a.name.common.localeCompare(b.name.common)
+      );
     } else if (filters.sort === "population") {
-        result.sort((a, b) => a.population - b.population);
+      result.sort((a, b) => a.population - b.population);
     }
 
     return result;
@@ -76,4 +82,3 @@ export default function useCountries() {
     setFilters,
   };
 }
-

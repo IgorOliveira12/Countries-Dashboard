@@ -115,3 +115,12 @@ body {
 .skeleton-card > div {
   animation: pulse 1.5s ease-in-out infinite;
 }
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.empty-state h2 {
+  margin-bottom: 0.5rem;
+}

@@ -2,6 +2,7 @@ import useCountries from "../hooks/useCountries";
 import Loader from "../components/Loader";
 import CountryCard from "../components/CountryCard";
 import Filters from "../components/Filters";
+import EmptyState from "../components/EmptyState";
 
 export default function Home() {
   const { countries, loading, error, filters, setFilters } = useCountries();
@@ -18,14 +19,18 @@ export default function Home() {
 
       <p className="total">Total: {countries.length}</p>
 
-      <section className="countries">
-        {countries.map(country => (
-          <CountryCard
-            key={country.name.common}
-            country={country}
-          />
-        ))}
-      </section>
+      {countries.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <section className="countries">
+          {countries.map(country => (
+            <CountryCard
+              key={country.name.common}
+              country={country}
+            />
+          ))}
+        </section>
+      )}
     </div>
   );
 }
